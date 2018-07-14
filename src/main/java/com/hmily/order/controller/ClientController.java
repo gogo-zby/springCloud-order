@@ -20,4 +20,6 @@ public class ClientController {
         log.info("response={}", response);
         return "feign: " + response;
     }
+
+
 }
