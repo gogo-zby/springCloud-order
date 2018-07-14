@@ -17,7 +17,6 @@ public class ClientController {
     public String getProductMsg() {
         //刚才定义的方法
         String response = productClient.productMsg();
-
         log.info("response={}", response);
         return "feign: " + response;
     }
