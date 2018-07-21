@@ -7,3 +7,15 @@ spring:
         enabled: true
         service-id: CONFIG
       profile: test
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+    testHystrixCommand5:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 1000

@@ -14,6 +14,16 @@ import java.util.Arrays;
 @DefaultProperties(defaultFallback = "defaultFallback")
 public class HystrixController {
 
+    @HystrixCommand
+    @GetMapping("/testHystrixCommand5")
+    public String testHystrixCommand5(@RequestParam("number") Integer number) {
+        if (number % 2 == 0) {
+            return "testHystrixCommand5 success";
+        }
+        RestTemplate restTemplate = new RestTemplate();
+        return "testHystrixCommand5: " + restTemplate.getForObject("http://127.0.0.1:8080/msg2", String.class);
+    }
+
     @HystrixCommand(commandProperties = {
             @HystrixProperty(name = "circuitBreaker.enabled", value = "true"),                //设置熔断
             @HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),    //请求数达到后才计算
