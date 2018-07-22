@@ -1,6 +1,8 @@
 package com.hmily.order.service.impl;
 
-import com.hmily.order.client.ProductClient;
+import com.hmily.product.client.ProductClient;
+import com.hmily.product.common.DecreaseStockInput;
+import com.hmily.product.common.ProductInfoOutput;
 import com.hmily.order.dataobject.OrderDetail;
 import com.hmily.order.dataobject.OrderMaster;
 import com.hmily.order.dataobject.ProductInfo;
@@ -47,12 +49,12 @@ public class OrderServiceImpl implements OrderService {
         List<String> productIdList = orderDTO.getOrderDetailList().stream()
                 .map(OrderDetail::getProductId)
                 .collect(Collectors.toList());
-        List<ProductInfo> productInfoList = productClient.listForOrder(productIdList);
-//
-       //计算总价
+        List<ProductInfoOutput> productInfoList = productClient.listForOrder(productIdList);
+
+        //计算总价
         BigDecimal orderAmout = new BigDecimal(BigInteger.ZERO);
         for (OrderDetail orderDetail: orderDTO.getOrderDetailList()) {
-            for (ProductInfo productInfo: productInfoList) {
+            for (ProductInfoOutput productInfo: productInfoList) {
                 if (productInfo.getProductId().equals(orderDetail.getProductId())) {
                     //单价*数量
                     orderAmout = productInfo.getProductPrice()
@@ -68,8 +70,8 @@ public class OrderServiceImpl implements OrderService {
         }
 
         //扣库存(调用商品服务)
-        List<CartDTO> decreaseStockInputList = orderDTO.getOrderDetailList().stream()
-                .map(e -> new CartDTO(e.getProductId(), e.getProductQuantity()))
+        List<DecreaseStockInput> decreaseStockInputList = orderDTO.getOrderDetailList().stream()
+                .map(e -> new DecreaseStockInput(e.getProductId(), e.getProductQuantity()))
                 .collect(Collectors.toList());
         productClient.decreaseStock(decreaseStockInputList);
 
@@ -80,7 +82,6 @@ public class OrderServiceImpl implements OrderService {
         orderMaster.setOrderAmount(orderAmout);
         orderMaster.setOrderStatus(OrderStatusEnum.NEW.getCode());
         orderMaster.setPayStatus(PayStatusEnum.WAIT.getCode());
-
         orderMasterRepository.save(orderMaster);
         return orderDTO;
     }

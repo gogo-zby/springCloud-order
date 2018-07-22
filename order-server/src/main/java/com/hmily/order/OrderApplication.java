@@ -8,11 +8,12 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 
 
-@EnableFeignClients   //feign调用的注解
+//@EnableFeignClients   //feign调用的注解
 //@SpringBootApplication
 //@EnableDiscoveryClient
 //@EnableCircuitBreaker
 @SpringCloudApplication
+@EnableFeignClients(basePackages = "com.hmily.product.client")
 public class OrderApplication {
 
 	public static void main(String[] args) {
