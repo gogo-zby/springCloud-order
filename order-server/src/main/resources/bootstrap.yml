@@ -25,3 +25,7 @@ feign:
 
 management:
   context-path: /
+
+logging:
+  level:
+    org.springframework.cloud.netflix.feign: debug
