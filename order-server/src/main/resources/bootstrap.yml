@@ -22,3 +22,6 @@ hystrix:
 feign:
   hystrix:
     enabled: true
+
+management:
+  context-path: /
